@@ -4,9 +4,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import com.min.valid.domain.Member;
+import com.min.valid.domain.MemberRole;
 
 import lombok.Getter;
 
@@ -22,6 +24,7 @@ public class MemberResDto {
     private String email;
     private String regDt;
     private String modDt;
+    private List<MemberRole> roles;
     
     public MemberResDto(Member member) {
         id = member.getId();
@@ -32,6 +35,7 @@ public class MemberResDto {
         email = member.getEmail();
         regDt = toStringDateTime(member.getRegDt());
         modDt = toStringDateTime(member.getModDt());
+        roles = member.getRoles();
     }
 
     private String toStringPhone(String phone1, String phone2, String phone3){

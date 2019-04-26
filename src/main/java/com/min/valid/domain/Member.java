@@ -1,5 +1,6 @@
 package com.min.valid.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Member extends BaseTimeEntity {
+public class Member extends BaseTimeEntity implements Serializable {
 
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -48,9 +49,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, unique = true, length=50)
     private String email;
     
-//    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-//	@JoinColumn(name="uid", referencedColumnName="uid") // referencedColumnName 없는 경우 이름만 같고 전혀 다른 컬럼 생성됨(h2: uid(varchar) 아닌 uid(bigint) 생성)
-//	private List<MemberRole> roles;
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="uid", referencedColumnName="uid") // referencedColumnName 없는 경우 이름만 같고 전혀 다른 컬럼 생성됨(h2: uid(varchar) 아닌 uid(bigint) 생성)
+	private List<MemberRole> roles;
     
     @Builder
     public Member(String uid, String passwd, String name, String phone1, String phone2, String phone3, String email) {

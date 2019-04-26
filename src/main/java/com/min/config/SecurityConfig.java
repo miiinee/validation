@@ -9,17 +9,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.min.valid.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
+	private UserDetailsService userDetailsService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -37,20 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.antMatcher("/**")
 			.authorizeRequests()
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/", "/h2-console/**", "/member/**").permitAll()
 				.antMatchers("/api/v1/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
-//					.usernameParameter("uid")
-//					.passwordParameter("passwd")
-//					.loginProcessingUrl("/customLogin")
-//					.defaultSuccessUrl("/").permitAll()
 				.and()
 				.logout()
-//					.logoutUrl("/customLogout")
-//					.logoutSuccessUrl("/")
-//					.invalidateHttpSession(true).permitAll()
 				.and()
 				.csrf().disable();
 
@@ -71,4 +64,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 }

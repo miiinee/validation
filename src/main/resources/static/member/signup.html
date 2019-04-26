@@ -48,7 +48,7 @@
                 email: $('#email').val()
             };
             $.ajax({
-                url:'api/v1/member',
+                url:'/api/v1/member',
                 method: 'POST',
                 data: JSON.stringify(member),
                 contentType: "application/json; charset=utf-8",
