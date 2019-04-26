@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Validation 서버에 집중하기</title>
+<!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="row m-auto" style="width: 1200px;">
+		<h1 class="mr-auto"> 회원 리스트 </h1>
+		<button type="button" id="signup" class="btn btn-primary mb-3">회원가입</button>
+    	<div class="header d-flex">
+    	</div>
+		<table class="table table-horizontal table-bordered">
+		    <thead class="thead-strong">
+		    <tr>
+		        <th>No.</th>
+		        <th>아이디</th>
+		        <th>비밀번호</th>
+		        <th>이름</th>
+		        <th>휴대폰번호</th>
+		        <th>Email</th>
+		        <th>등록일</th>
+		        <th>수정일</th>
+		    </tr>
+		    </thead>
+		    <tbody id="tbody">
+		
+		    </tbody>
+		</table>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+
+    <script id="table-template" type="text/x-handlebars-template">
+        {{#each members}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{uid}}</td>
+                <td>{{passwd}}</td>
+                <td>{{name}}</td>
+                <td>{{phoneNumber}}</td>
+                <td>{{email}}</td>
+                <td>{{regDt}}</td>
+                <td>{{modDt}}</td>
+            </tr>
+        {{/each}}
+    </script>
+
+    <script type="application/javascript">
+        var $tbody = $('#tbody');
+
+        var findAll = function () {
+            $.ajax({
+                url:'/api/v1/members',
+                method: 'GET',
+                success: function (response) {
+                    var source   = $("#table-template").html();
+                    var template = Handlebars.compile(source);
+                    var html = template({members:response});
+                    $tbody.html('');
+                    $tbody.html(html);
+                }
+            });
+        };
+
+        findAll();
+        
+        $('#signup').click(function(){
+        	location.href="/member/signup.html"
+        });
+        
+    </script>
+</body>
+</html>
