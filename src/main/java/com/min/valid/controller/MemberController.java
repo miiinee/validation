@@ -26,6 +26,15 @@ public class MemberController {
 
 	private MemberService service;
 
+
+//	@GetMapping("/login")
+//	public String login(HttpServletRequest req) {
+//		String referer = req.getHeader("Referer");
+//		req.getSession().setAttribute("prevPage", referer);
+//		
+//		return "login";
+//	}
+	
 	@PostMapping("/member")
 	public Long save(@RequestBody @Valid MemberReqDto reqDto) {
 		MemberRole role = new MemberRole();

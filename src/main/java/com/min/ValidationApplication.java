@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.WebRequest;
 
 import com.min.valid.exception.ValidCustomException;
@@ -35,6 +36,10 @@ public class ValidationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ValidationApplication.class, args);
+		
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String pw = (passwordEncoder.encode("1234"));
+		System.out.println(">>>>>>>>>>>>>>"+ pw);
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.min.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,22 +8,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import com.min.common.CustomLoginSuccessHandler;
+import com.min.valid.service.MemberServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Value("${spring.security.enable-csrf}")
-    private boolean csrfEnabled;
+	private MemberServiceImpl userDetailsService;
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -42,27 +38,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
+					.loginPage("/login") // 로그인 뷰 페이지 연결
+					.loginProcessingUrl("/login") // POST로 로그인 처리할 url
+					.defaultSuccessUrl("/") // 로그인 성공 후 이동할 페이지
+					.failureUrl("/login") // 로그인 실패 후 이동할 페이지 (default: /login?error)
 				.and()
-				.logout()
-				.and()
-				.csrf().disable();
+					.logout();
 
-		if(!csrfEnabled)
-	       {
-	         http.csrf().disable();
-	       }
+//		http.csrf().ignoringAntMatchers("/h2-console/**");
+		http.csrf().disable();
 		
 		http.headers().frameOptions().disable();
 	}
 	
 	@Autowired
 	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public AuthenticationSuccessHandler successHandler() {
+	  return new CustomLoginSuccessHandler("/");//default로 이동할 url
 	}
 	
 }

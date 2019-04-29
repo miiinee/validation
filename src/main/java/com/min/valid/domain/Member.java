@@ -24,6 +24,11 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Member extends BaseTimeEntity implements Serializable {
 
+	/**
+	 * default serial id
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -54,7 +59,7 @@ public class Member extends BaseTimeEntity implements Serializable {
 	private List<MemberRole> roles;
     
     @Builder
-    public Member(String uid, String passwd, String name, String phone1, String phone2, String phone3, String email) {
+    public Member(String uid, String passwd, String name, String phone1, String phone2, String phone3, String email, List<MemberRole> roles) {
         this.uid = uid;
         this.passwd = passwd;
     	this.name = name;
@@ -62,5 +67,6 @@ public class Member extends BaseTimeEntity implements Serializable {
         this.phone2 = phone2;
         this.phone3 = phone3;
         this.email = email;
+        this.roles = roles;
     }
 }

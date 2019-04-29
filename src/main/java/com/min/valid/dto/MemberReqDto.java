@@ -51,6 +51,7 @@ public class MemberReqDto {
     			.phone2(phones[1])
     			.phone3(phones[2])
     			.email(email)
+    			.roles(roles)
     			.build();
     }
     

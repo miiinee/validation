@@ -13,5 +13,3 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
-  security:
-    enable-csrf: false
